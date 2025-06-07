@@ -244,22 +244,22 @@
         </div>
 
         <!-- Spotify Playlist Section -->
-        <div id="spotifySection" class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg mb-8">
-            <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center space-x-3">
-                    <i class="fab fa-spotify text-green-500 text-3xl"></i>
-                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Music for Your Mood</h2>
+        <div id="spotifySection" class="bg-white dark:bg-gray-800 rounded-2xl p-3 sm:p-4 md:p-6 shadow-lg mb-6 md:mb-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between mb-3 sm:mb-4 md:mb-6">
+                <div class="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-0">
+                    <i class="fab fa-spotify text-green-500 text-xl sm:text-2xl md:text-3xl"></i>
+                    <h2 class="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 dark:text-white">Music for Your Mood</h2>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <button class="playlist-btn" data-mood="happy">
+                <div class="flex flex-wrap justify-center gap-1.5 sm:gap-2">
+                    <button class="playlist-btn text-xs sm:text-sm md:text-base px-2 py-1 sm:px-3 sm:py-1.5" data-mood="happy">
                         <i class="fas fa-sun text-yellow-500"></i>
                         Happy
                     </button>
-                    <button class="playlist-btn" data-mood="relaxed">
+                    <button class="playlist-btn text-xs sm:text-sm md:text-base px-2 py-1 sm:px-3 sm:py-1.5" data-mood="relaxed">
                         <i class="fas fa-cloud text-blue-500"></i>
                         Relaxed
                     </button>
-                    <button class="playlist-btn" data-mood="energetic">
+                    <button class="playlist-btn text-xs sm:text-sm md:text-base px-2 py-1 sm:px-3 sm:py-1.5" data-mood="energetic">
                         <i class="fas fa-bolt text-orange-500"></i>
                         Energetic
                     </button>
@@ -267,16 +267,13 @@
             </div>
             
             <!-- Spotify Player with Enhanced UI -->
-            <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl p-6 shadow-inner">
-                <div class="flex flex-col md:flex-row gap-6">
-                    <!-- Album Art Preview -->
-                   
-                    
+            <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl p-2 sm:p-3 md:p-6 shadow-inner">
+                <div class="flex flex-col gap-3 sm:gap-4">
                     <!-- Spotify Player -->
-                    <div class="flex-grow">
+                    <div class="flex-grow flex items-center justify-center" style="padding: 4px;">
                         <iframe id="spotify-embed"
-                            class="w-full h-80 rounded-lg shadow-lg"
-                            style="border:none"
+                            class="rounded-lg shadow-lg"
+                            style="border: none; width: calc(100% - 8px); height: calc(100% - 8px); min-height: 200px; max-height: 300px;"
                             loading="lazy"
                             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
                         </iframe>
@@ -285,18 +282,18 @@
             </div>
 
             <!-- Playlist Controls -->
-            <div class="mt-6 flex justify-center space-x-4">
-                <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-full transition-colors duration-200 flex items-center space-x-2">
+            <div class="mt-3 sm:mt-4 md:mt-6 flex flex-wrap justify-center gap-1.5 sm:gap-2 md:gap-4">
+                <button class="px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 bg-green-500 hover:bg-green-600 text-white rounded-full transition-colors duration-200 flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm md:text-base">
                     <i class="fas fa-random"></i>
                     <span>Shuffle</span>
                 </button>
-                <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-full transition-colors duration-200 flex items-center space-x-2">
+                <button class="px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 bg-green-500 hover:bg-green-600 text-white rounded-full transition-colors duration-200 flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm md:text-base">
                     <i class="fas fa-redo"></i>
                     <span>Repeat</span>
                 </button>
             </div>
 
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-4 text-center">
+            <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-2 sm:mt-3 md:mt-4 text-center">
                 <i class="fas fa-info-circle mr-1"></i>
                 Music recommendations based on your current weather and mood
             </p>
