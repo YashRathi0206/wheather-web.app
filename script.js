@@ -1116,35 +1116,33 @@ function updateClothingSuggestions(weatherData) {
     let html = `
         <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 shadow-lg transform transition-all duration-300 hover:scale-[1.02]">
             <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
                     <span>👔</span> What to Wear
                 </h2>
-                <div class="text-3xl">${weatherEmoji}</div>
             </div>
-            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-4">
                     <div class="bg-white/5 rounded-lg p-4 transform transition-all duration-300 hover:bg-white/10">
-                        <h3 class="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-3 flex items-center gap-2">
                             <span>👕</span> Top
                         </h3>
                         <ul class="space-y-2">
                             ${suggestions.top.map(item => `
-                                <li class="text-gray-200 flex items-center gap-2">
-                                    <span class="text-yellow-400">•</span>
+                                <li class="text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                                    <span class="text-yellow-500">•</span>
                                     <span>${item}</span>
                                 </li>
                             `).join('')}
                         </ul>
                     </div>
                     <div class="bg-white/5 rounded-lg p-4 transform transition-all duration-300 hover:bg-white/10">
-                        <h3 class="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-3 flex items-center gap-2">
                             <span>👖</span> Bottom
                         </h3>
                         <ul class="space-y-2">
                             ${suggestions.bottom.map(item => `
-                                <li class="text-gray-200 flex items-center gap-2">
-                                    <span class="text-yellow-400">•</span>
+                                <li class="text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                                    <span class="text-yellow-500">•</span>
                                     <span>${item}</span>
                                 </li>
                             `).join('')}
@@ -1153,26 +1151,26 @@ function updateClothingSuggestions(weatherData) {
                 </div>
                 <div class="space-y-4">
                     <div class="bg-white/5 rounded-lg p-4 transform transition-all duration-300 hover:bg-white/10">
-                        <h3 class="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-3 flex items-center gap-2">
                             <span>🧥</span> Outerwear
                         </h3>
                         <ul class="space-y-2">
                             ${suggestions.outerwear.map(item => `
-                                <li class="text-gray-200 flex items-center gap-2">
-                                    <span class="text-yellow-400">•</span>
+                                <li class="text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                                    <span class="text-yellow-500">•</span>
                                     <span>${item}</span>
                                 </li>
                             `).join('')}
                         </ul>
                     </div>
                     <div class="bg-white/5 rounded-lg p-4 transform transition-all duration-300 hover:bg-white/10">
-                        <h3 class="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-3 flex items-center gap-2">
                             <span>🧤</span> Accessories
                         </h3>
                         <ul class="space-y-2">
                             ${suggestions.accessories.map(item => `
-                                <li class="text-gray-200 flex items-center gap-2">
-                                    <span class="text-yellow-400">•</span>
+                                <li class="text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                                    <span class="text-yellow-500">•</span>
                                     <span>${item}</span>
                                 </li>
                             `).join('')}
@@ -1181,7 +1179,7 @@ function updateClothingSuggestions(weatherData) {
                 </div>
             </div>
             
-            <div class="mt-4 text-sm text-gray-400 text-center">
+            <div class="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
                 Based on current temperature: ${temp.toFixed(1)}°C
             </div>
         </div>
@@ -1445,4 +1443,4 @@ function initApp() {
 }
 
 // Initialize the app when the DOM is loaded
-document.addEventListener('DOMContentLoaded', initApp); 
+document.addEventListener('DOMContentLoaded', initApp);
