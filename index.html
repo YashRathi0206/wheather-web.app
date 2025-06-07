@@ -4,9 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WeatherWise - Smart Weather App</title>
+    <!-- Update permissions policy -->
+    <meta http-equiv="Permissions-Policy" content="geolocation=*, autoplay=*, encrypted-media=*, fullscreen=*, picture-in-picture=*, clipboard-write=*">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Load Three.js and Globe.gl from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.32.1/dist/globe.gl.min.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -37,9 +43,131 @@
         .floating {
             animation: float 3s ease-in-out infinite;
         }
+        #globeViz {
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+        .dark #globeViz {
+            background: rgba(17, 24, 39, 0.5);
+        }
+        /* Loading overlay styles */
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .dark #loadingOverlay {
+            background: rgba(0, 0, 0, 0.7);
+        }
+        .dark .loading-spinner {
+            border-color: #374151;
+            border-top-color: #60a5fa;
+        }
+        .playlist-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            background-color: #f3f4f6;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .dark .playlist-btn {
+            background-color: #374151;
+            color: #d1d5db;
+        }
+        .playlist-btn:hover {
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+        .dark .playlist-btn:hover {
+            background-color: #064e3b;
+            color: #6ee7b7;
+        }
+        .playlist-btn.active {
+            background-color: #22c55e;
+            color: white;
+        }
+        .dark .playlist-btn.active {
+            background-color: #16a34a;
+        }
+        .playlist-btn.active:hover {
+            background-color: #16a34a;
+        }
+        .dark .playlist-btn.active:hover {
+            background-color: #15803d;
+        }
+        .song-card {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            background-color: #f9fafb;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.2s;
+        }
+        .dark .song-card {
+            background-color: #374151;
+        }
+        .song-card:hover {
+            background-color: #f3f4f6;
+        }
+        .dark .song-card:hover {
+            background-color: #4b5563;
+        }
+        .song-card img {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.375rem;
+        }
+        .song-info {
+            flex: 1;
+        }
+        .song-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #1f2937;
+        }
+        .dark .song-title {
+            color: white;
+        }
+        .song-artist {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        .dark .song-artist {
+            color: #9ca3af;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 min-h-screen transition-colors duration-300">
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
     <!-- Main Container -->
     <div class="container mx-auto px-4 py-8">
         <!-- Header Section -->
@@ -52,12 +180,20 @@
             </button>
         </header>
 
+        <!-- Globe Visualization -->
+        <div id="globeViz" class="h-[500px] w-full rounded-[50px] shadow-lg mb-8"></div>
+
         <!-- Search Section -->
         <div class="mb-8">
             <div class="relative">
                 <input type="text" id="citySearch" 
                     class="w-full p-4 rounded-xl bg-white dark:bg-gray-800 shadow-lg text-gray-800 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Search for a city...">
+                    placeholder="Search for a city..."
+                    list="citySuggestions"
+                    autocomplete="off">
+                <datalist id="citySuggestions">
+                    <!-- Suggestions will be populated dynamically -->
+                </datalist>
                 <button id="searchBtn" class="absolute right-4 top-1/2 transform -translate-y-1/2">
                     <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -87,6 +223,18 @@
             </div>
         </div>
 
+        <!-- AQI Section -->
+        <div id="aqiDisplay" class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Air Quality Index</h2>
+            <!-- AQI information will be dynamically populated -->
+        </div>
+
+        <!-- Weather Alerts Section -->
+        <div id="alertsDisplay" class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg mb-8 hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Weather Alerts</h2>
+            <!-- Weather alerts will be dynamically populated -->
+        </div>
+
         <!-- 5-Day Forecast Section -->
         <div id="forecast" class="mb-8">
             <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">5-Day Forecast</h2>
@@ -97,11 +245,65 @@
 
         <!-- Spotify Playlist Section -->
         <div id="spotifySection" class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg mb-8">
-            <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Mood Playlist</h2>
-            <div id="spotifyPlayer" class="aspect-w-16 aspect-h-9">
-                <!-- Spotify iframe will be dynamically populated -->
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-3">
+                    <i class="fab fa-spotify text-green-500 text-3xl"></i>
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white">Music for Your Mood</h2>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="playlist-btn" data-mood="happy">
+                        <i class="fas fa-sun text-yellow-500"></i>
+                        Happy
+                    </button>
+                    <button class="playlist-btn" data-mood="relaxed">
+                        <i class="fas fa-cloud text-blue-500"></i>
+                        Relaxed
+                    </button>
+                    <button class="playlist-btn" data-mood="energetic">
+                        <i class="fas fa-bolt text-orange-500"></i>
+                        Energetic
+                    </button>
+                </div>
             </div>
+            
+            <!-- Spotify Player with Enhanced UI -->
+            <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl p-6 shadow-inner">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <!-- Album Art Preview -->
+                   
+                    
+                    <!-- Spotify Player -->
+                    <div class="flex-grow">
+                        <iframe id="spotify-embed"
+                            class="w-full h-80 rounded-lg shadow-lg"
+                            style="border:none"
+                            loading="lazy"
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Playlist Controls -->
+            <div class="mt-6 flex justify-center space-x-4">
+                <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-full transition-colors duration-200 flex items-center space-x-2">
+                    <i class="fas fa-random"></i>
+                    <span>Shuffle</span>
+                </button>
+                <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-full transition-colors duration-200 flex items-center space-x-2">
+                    <i class="fas fa-redo"></i>
+                    <span>Repeat</span>
+                </button>
+            </div>
+
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-4 text-center">
+                <i class="fas fa-info-circle mr-1"></i>
+                Music recommendations based on your current weather and mood
+            </p>
         </div>
+
+        <!-- Clothing Suggestions Section -->
+        <div id="clothingSuggestions" class="mt-6"></div>
 
         <!-- Favorites Section -->
         <div id="favorites" class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
@@ -110,7 +312,17 @@
                 <!-- Favorite cities will be dynamically populated -->
             </div>
         </div>
+
+        <!-- Unit Toggle Button -->
+        <button id="unitToggle" class="fixed bottom-4 right-4 p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg">
+            <span class="text-gray-800 dark:text-white">°C/°F</span>
+        </button>
     </div>
+
+    <footer class="text-center text-gray-600 dark:text-gray-400 mt-8">
+        <p>&copy; 2023 WeatherWise. All rights reserved.</p>
+        <p>Developed with ❤️ by Yash Rathi</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
