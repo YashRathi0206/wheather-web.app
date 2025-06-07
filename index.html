@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherWise - Smart Weather App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .weather-icon {
+            transition: transform 0.3s ease;
+        }
+        .weather-icon:hover {
+            transform: scale(1.1);
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 min-h-screen transition-colors duration-300">
+    <!-- Main Container -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header Section -->
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">WeatherWise</h1>
+            <button id="themeToggle" class="p-2 rounded-lg bg-white dark:bg-gray-800 shadow-lg">
+                <svg class="w-6 h-6 text-gray-800 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+            </button>
+        </header>
+
+        <!-- Search Section -->
+        <div class="mb-8">
+            <div class="relative">
+                <input type="text" id="citySearch" 
+                    class="w-full p-4 rounded-xl bg-white dark:bg-gray-800 shadow-lg text-gray-800 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Search for a city...">
+                <button id="searchBtn" class="absolute right-4 top-1/2 transform -translate-y-1/2">
+                    <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Current Weather Section -->
+        <div id="currentWeather" class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg mb-8 hidden">
+            <!-- Content will be dynamically populated -->
+        </div>
+
+        <!-- Weather Visualization Section -->
+        <div id="weatherVisualization" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
+                <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Temperature Overview</h2>
+                <div id="tempVisualization" class="flex items-center justify-center h-48">
+                    <!-- Temperature visualization will be dynamically populated -->
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
+                <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Weather Conditions</h2>
+                <div id="conditionsVisualization" class="flex items-center justify-center h-48">
+                    <!-- Weather conditions visualization will be dynamically populated -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 5-Day Forecast Section -->
+        <div id="forecast" class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">5-Day Forecast</h2>
+            <div class="flex overflow-x-auto space-x-4 pb-4">
+                <!-- Forecast cards will be dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Spotify Playlist Section -->
+        <div id="spotifySection" class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Mood Playlist</h2>
+            <div id="spotifyPlayer" class="aspect-w-16 aspect-h-9">
+                <!-- Spotify iframe will be dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Favorites Section -->
+        <div id="favorites" class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Favorite Cities</h2>
+            <div id="favoritesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Favorite cities will be dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
